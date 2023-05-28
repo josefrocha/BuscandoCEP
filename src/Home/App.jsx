@@ -7,7 +7,7 @@ import { AiFillGithub } from "react-icons/ai"
 function App() {
   const [cep, setCep] = useState(0)
   const [dataRegion, setDataRegion] = useState([])
-
+  
   function handleChange(event) {
     setCep(event.target.value)
   }
@@ -21,10 +21,11 @@ function App() {
 
   useEffect(() => {
     fetchData()
+    setDataRegion([])
   }, [])
 
   async function fetchData() {
-    if (cep == 0) {
+    if (cep === 0) {
       return
     }
 
@@ -32,19 +33,44 @@ function App() {
       cep.replace("-", "")
     }
 
-    const res = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
-    const data = res.data
+    try {
+      const res = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+      const data = res.data
 
-    setDataRegion([
-      {
-        burgh: data.bairro,
-        city: data.localidade,
-        address: data.logradouro,
-        state: data.uf,
-        ddd: data.ddd,
-        cep: data.cep,
-      },
-    ])
+      if (data.erro) {
+        setDataRegion([
+          {
+            error: "Este CEP não foi encontrado no banco de dados",
+          },
+        ])
+        return
+      }
+
+      setDataRegion([
+        {
+          burgh: data.bairro,
+          city: data.localidade,
+          address: data.logradouro,
+          state: data.uf,
+          ddd: data.ddd,
+          cep: data.cep,
+        },
+      ])
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setDataRegion([
+          {
+            error: "Excedeu o limite de caracteres.",
+          },
+        ])
+      } else {
+        setDataRegion([
+          {
+            error: "Houve um problema ao tentar buscar o seu CEP, tente novamente",
+          },
+        ])
+      }
+    }
   }
 
   return (
@@ -63,6 +89,7 @@ function App() {
               type="text"
               onChange={(e) => handleChange(e)}
               placeholder="Seu CEP aqui!"
+              maxLength={9}
             />
 
             <button className="submit" type="submit">
@@ -72,25 +99,32 @@ function App() {
         </section>
 
         <section className="data-region">
-          {dataRegion.map((region) => (
-            <ul id="region" key={region.cep}>
-              <li>
-                <strong>Rua:</strong> {region.address || "Não foi encontrada"}
-              </li>
-              <li>
-                <strong>Cidade:</strong> {region.city || "Não foi encontrada"}
-              </li>
-              <li>
-                <strong>DDD:</strong> {region.ddd || "Não foi encontrado"}
-              </li>
-              <li>
-                <strong>Estado:</strong> {region.state || "Não foi encontrado"}
-              </li>
-              <li>
-                <strong>CEP:</strong> {region.cep || "Não foi encontrado"}
-              </li>
-            </ul>
-          ))}
+          {dataRegion.length > 0 && !dataRegion[0].error ? (
+            dataRegion.map((region) => (
+              <ul id="region" key={region.cep}>
+                <li>
+                  <strong>Rua:</strong> {region.address || "Não foi encontrada"}
+                </li>
+                <li>
+                  <strong>Cidade:</strong> {region.city || "Não foi encontrada"}
+                </li>
+                <li>
+                  <strong>DDD:</strong> {region.ddd || "Não foi encontrado"}
+                </li>
+                <li>
+                  <strong>Estado:</strong>{" "}
+                  {region.state || "Não foi encontrado"}
+                </li>
+                <li>
+                  <strong>CEP:</strong> {region.cep || "Não foi encontrado"}
+                </li>
+              </ul>
+            ))
+          ) : (
+            <div className="errorCEP">
+              {dataRegion.length > 0 ? dataRegion[0].error : ""}
+            </div>
+          )}
         </section>
       </main>
 
@@ -99,7 +133,7 @@ function App() {
           este projeto foi feito com afins de práticar, by: yukz (josefrocha)
         </p>
         <a href="https://github.com/josefrocha" target="_blank">
-        <AiFillGithub size={25} />
+          <AiFillGithub size={25} />
         </a>
       </footer>
     </div>

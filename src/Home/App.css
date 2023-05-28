@@ -122,3 +122,11 @@ footer a {
   color: white;
   margin-top: 5px;
 }
+
+.errorCEP {
+  width: 400px;
+  height: 250px;
+
+  color: gray;
+  font-weight: bold;
+}
