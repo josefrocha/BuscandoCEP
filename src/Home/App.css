@@ -1,0 +1,124 @@
+:root {
+  --bg-color: #5e2929;
+  --bg-border: #a52a2a;
+  --title-color: #fff;
+}
+
+body {
+  background-color: var(--bg-color);
+}
+
+header {
+  background-color: var(--bg-color);
+  border-bottom: 3px solid var(--bg-border);
+}
+
+header > h1 {
+  text-align: center;
+  padding: 1em;
+
+  font-weight: bold;
+  font-size: 23px;
+
+  color: var(--title-color);
+}
+
+main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.searchcep {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 2rem 0rem;
+  line-height: 25px;
+}
+
+.searchcep h2 {
+  font-size: 20px;
+  font-weight: bold;
+
+  color: #fff;
+}
+
+.searchcep p {
+  font-size: 16px;
+  font-weight: 400;
+
+  color: #fff;
+}
+
+form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+input {
+  width: 100%;
+
+  padding: 10px;
+  margin: 25px 0px;
+
+  border-radius: 8px;
+  border: 0;
+  
+  background-color: var(--bg-border);
+}
+
+input::placeholder, ::-webkit-input-placeholder {
+  color: #fff;
+  font-size: 14px;
+}
+
+.submit {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 8px;
+  border: 0;
+
+  background: transparent;
+  cursor: pointer;
+}
+
+.data-region {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: #fff;
+  gap: 12px;
+}
+
+#region {
+  display: flex;
+  flex-direction: column;
+
+  list-style: none;
+  gap: 10px;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #5e2929;
+  color: #fff;
+  padding: 20px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  gap: 1rem;
+}
+
+footer a {
+  color: white;
+  margin-top: 5px;
+}
